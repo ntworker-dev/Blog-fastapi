@@ -20,18 +20,30 @@ class Database:
             connection.close()
 
     def init_schema(self):
-        query = """
+        posts_query = """
             CREATE TABLE IF NOT EXISTS posts(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 content TEXT NOT NULL,
-                author TEXT NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                user_id TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         """
+
+        users_query = """
+            CREATE TABLE IF NOT EXISTS users(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
+                email TEXT NOT NULL,
+                registered_at DATETIME DEFAULT CURRENT_TIMESTAMP 
+            )
+        """
+
         with self._get_connection() as connection:
             cursor = connection.cursor()
-            cursor.execute(query)
+            cursor.execute(posts_query)
+            cursor.execute(users_query)
 
     def create_post(self, title: str, content: str, author: str) -> dict[str, str]:
         query = "INSERT INTO posts (title, content, author) VALUES (?, ?, ?)"
@@ -51,3 +63,11 @@ class Database:
             cursor.execute(query)
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
+
+    def get_post_by_id(self, id: str) -> dict | None:
+        query = """SELECT title, content, author, created_at WHERE id = ?"""
+        with self._get_connection() as connection:
+            cursor = connection.cursor()
+            cursor.execute(query, (id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
