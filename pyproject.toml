@@ -1,10 +1,12 @@
 [project]
-name = "pythonproject4"
+name = "Blog-fastapi"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
     "dotenv>=0.9.9",
     "fastapi>=0.138.1",
+    "passlib[bcrypt]>=1.7.4",
+    "pyjwt>=2.13.0",
     "sqlmodel>=0.0.39",
 ]

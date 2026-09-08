@@ -1,15 +1,19 @@
-from sqlalchemy import table
-from sqlmodel import SQLModel, Field
+# from sqlmodel import SQLModel, Field
+from pydantic import BaseModel, Field
 
-class Post(SQLModel, table = True):
-    id: str = Field(primary_key=True)
+class Post(BaseModel):
+    id: int | None = Field(default=None)
     title: str
     content: str
-    user_id: str = Field(foreign_key="users.id")
-    created_at: str
+    # user_id: str = Field(foreign_key="users.id")
 
-class User(SQLModel, table = True):
-    id: str = Field(primary_key=True)
+class User(BaseModel):
+    id: int | None
     username: str
     email: str
-    registered_at: str
+    # registered_at: str | None = Field(default=None)
+
+class CreateUser(BaseModel):
+    username: str
+    email: str
+    password: str

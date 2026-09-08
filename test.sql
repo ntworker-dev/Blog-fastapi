@@ -1,0 +1,6 @@
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    birthdate TEXT NOT NULL DEFAULT "1970-01-01"
+)
