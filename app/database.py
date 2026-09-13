@@ -1,7 +1,7 @@
 import sqlite3
 from contextlib import contextmanager
 
-from test import query
+# from test import query
 
 
 class Database:
